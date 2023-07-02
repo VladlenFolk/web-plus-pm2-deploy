@@ -13,8 +13,7 @@ import ConflictError from '../errors/conflict-error';
 
 interface RequestWithUser extends Request {
   user: {
-    _id: string; // Ваш тип данных для _id
-    // Добавьте другие свойства пользователя, если они нужны
+    _id: string;
   };
 }
 
