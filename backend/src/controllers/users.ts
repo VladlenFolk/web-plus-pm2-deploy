@@ -11,6 +11,13 @@ import BadRequestError from '../errors/bad-request-error';
 import NotFoundError from '../errors/not-found-error';
 import ConflictError from '../errors/conflict-error';
 
+interface RequestWithUser extends Request {
+  user: {
+    _id: string; // Ваш тип данных для _id
+    // Добавьте другие свойства пользователя, если они нужны
+  };
+}
+
 const login = (req: Request, res: Response, next: NextFunction) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
@@ -60,11 +67,11 @@ const getUser = (req: Request, res: Response, next: NextFunction) => {
   getUserData(req.params.id, res, next);
 };
 
-const getCurrentUser = (req: Request, res: Response, next: NextFunction) => {
+const getCurrentUser = (req: RequestWithUser, res: Response, next: NextFunction) => {
   getUserData(req.user._id, res, next);
 };
 
-const updateUserData = (req: Request, res: Response, next: NextFunction) => {
+const updateUserData = (req: RequestWithUser, res: Response, next: NextFunction) => {
   const { user: { _id }, body } = req;
   User.findByIdAndUpdate(_id, body, { new: true, runValidators: true })
     .orFail(() => new NotFoundError('Пользователь по заданному id отсутствует в базе'))
