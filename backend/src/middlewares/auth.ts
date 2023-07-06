@@ -1,10 +1,17 @@
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 import { Request, Response, NextFunction } from 'express';
-import { JWT_SECRET } from '../config';
 import UnauthorizedError from '../errors/unauthorized-error';
 
 interface JwtPayload {
   _id: string
+}
+
+dotenv.config({ path: '../../.env' });
+const { JWT_SECRET } = process.env;
+if (!JWT_SECRET) {
+  console.error('Отсутствует значение для JWT_SECRET в переменных окружения');
+  process.exit(1); // Выход из приложения с ошибкой
 }
 
 const auth = (req: Request, res: Response, next: NextFunction) => {

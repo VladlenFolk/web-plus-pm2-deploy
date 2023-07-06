@@ -6,8 +6,12 @@ import cookieParser from 'cookie-parser';
 import { errors } from 'celebrate';
 import cors from 'cors';
 import errorHandler from './middlewares/error-handler';
-import { DB_ADDRESS } from './config';
 import routes from './routes';
+
+const dotenv = require('dotenv');
+
+dotenv.config({ path: '../.env' });
+const { DB_ADDRESS = 'mongodb://localhost:27017/mestodb' } = process.env;
 
 const { PORT = 3000 } = process.env;
 const app = express();

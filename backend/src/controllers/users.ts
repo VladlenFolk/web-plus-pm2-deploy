@@ -1,12 +1,12 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 import {
   Request,
   Response,
   NextFunction,
 } from 'express';
 import User from '../models/user';
-import { JWT_SECRET } from '../config';
 import BadRequestError from '../errors/bad-request-error';
 import NotFoundError from '../errors/not-found-error';
 import ConflictError from '../errors/conflict-error';
@@ -15,6 +15,13 @@ interface RequestWithUser extends Request {
   user: {
     _id: string;
   };
+}
+
+dotenv.config({ path: '../../.env' });
+const { JWT_SECRET } = process.env;
+if (!JWT_SECRET) {
+  console.error('Отсутствует значение для JWT_SECRET в переменных окружения');
+  process.exit(1); // Выход из приложения с ошибкой
 }
 
 const login = (req: Request, res: Response, next: NextFunction) => {
